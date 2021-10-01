@@ -50,7 +50,12 @@ const HistoryController = {
     let { topicId, userId } = req.query;
 
     try {
-      const historyList = await History.find().sort({ createdAt: -1 }).limit(1);
+      const historyList = await History.find({
+        topicId,
+        userId,
+      })
+        .sort({ createdAt: -1 })
+        .limit(1);
       res.status(200).json({
         history: historyList[0],
       });
