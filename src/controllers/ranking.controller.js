@@ -7,7 +7,6 @@ const RankingController = {
     const newRanking = { userId, username, topicId, score, time };
     try {
       const ranking = await Ranking.create(newRanking);
-
       res.status(200).json({
         ranking,
       });
@@ -25,7 +24,7 @@ const RankingController = {
         topicId: topicId.topicId,
       })
         .sort({
-          sorce: 'desc',
+          score: -1,
         })
         .limit(10);
 
