@@ -7,11 +7,9 @@ const {
 } = require('../helpers/findAnswers');
 const History = require('../models/history.model');
 const Question = require('../models/question.model');
-const Topic = require('../models/topic.model');
 const HistoryController = {
   create: async (req, res) => {
     const { timespan, topicId, answers, userId, isSubmit } = req.body;
-
     try {
       const questions = await Question.find({
         topicId,
