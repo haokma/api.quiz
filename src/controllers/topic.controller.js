@@ -100,6 +100,28 @@ const TopicController = {
       });
     }
   },
+  update: async (req, res) => {
+    const { topicId } = req.params;
+    const { views } = req.body;
+    try {
+      const topic = await Topic.findOneAndUpdate(
+        { _id: topicId },
+        {
+          views,
+        },
+        {
+          new: true,
+        }
+      );
+      res.status(200).json({
+        topic,
+      });
+    } catch (error) {
+      res.status(500).json({
+        error,
+      });
+    }
+  },
 };
 
 module.exports = TopicController;
