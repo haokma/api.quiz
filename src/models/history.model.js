@@ -14,6 +14,8 @@ const historySchema = Schema(
     totalEmpty: { type: Number, default: 0 },
     totalComplete: { type: Number, default: 0 },
     score: { type: Number, default: 0 },
+    questions: { type: Array, default: [] },
+    answersResult: { type: Array, default: [] },
   },
   {
     timestamps: true,
