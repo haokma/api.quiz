@@ -5,11 +5,12 @@ const {
   answersEmpty,
   checkAnswersList,
 } = require('../helpers/findAnswers');
+const Pagination = require('../helpers/pagination');
 const History = require('../models/history.model');
 const Question = require('../models/question.model');
 const HistoryController = {
   create: async (req, res) => {
-    const { timespan, topicId, answers, userId, isSubmit } = req.body;
+    const { timespan, topicId, answers, userId, isSubmit, username, topicName } = req.body;
     try {
       const questions = await Question.find({
         topicId,
@@ -22,6 +23,8 @@ const HistoryController = {
       const totalComplete = totalSuccess + totalError;
       const answersResult = checkAnswersList(questions, answers);
       const newHistory = {
+        username,
+        topicName,
         timespan,
         topicId,
         answers,
@@ -66,6 +69,45 @@ const HistoryController = {
         .limit(1);
       res.status(200).json({
         history: historyList[0],
+      });
+    } catch (error) {
+      res.status(400).json({
+        error: error.message,
+      });
+    }
+  },
+  getListByUser: async (req, res) => {
+    let { page, limit, name_like, userId, topicId } = req.query;
+    let skip, sort, query;
+    try {
+      name_like = name_like || '';
+      page = Pagination.page(+page);
+      limit = Pagination.limit(+limit);
+      skip = Pagination.skip(+page, +limit);
+      query = {
+        userId,
+        topicId,
+      };
+      console.log(userId, topicId);
+      if (!topicId) {
+        delete query.topicId;
+      }
+
+      const historyList = await History.find(query, {
+        timespan: 0,
+        answers: 0,
+        answersResult: 0,
+        answersResult: 0,
+        questions: 0,
+      })
+        .sort(sort)
+        .skip(skip)
+        .limit(limit);
+      const total = await History.find(query).count();
+
+      res.status(200).json({
+        historyList,
+        pagination: Pagination.result(limit, page, total),
       });
     } catch (error) {
       res.status(400).json({

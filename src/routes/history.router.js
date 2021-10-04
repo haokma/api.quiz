@@ -5,5 +5,6 @@ const router = express.Router();
 
 router.post('/', HistoryController.create);
 router.get('/', HistoryController.get);
+router.get('/getByUser', HistoryController.getListByUser);
 
 module.exports = router;

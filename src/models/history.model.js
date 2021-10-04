@@ -16,6 +16,8 @@ const historySchema = Schema(
     score: { type: Number, default: 0 },
     questions: { type: Array, default: [] },
     answersResult: { type: Array, default: [] },
+    username: { type: String, require },
+    topicName: { type: String, require },
   },
   {
     timestamps: true,
